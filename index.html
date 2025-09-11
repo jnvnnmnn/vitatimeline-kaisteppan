@@ -441,3 +441,12 @@
     </script>
 </body>
 </html>
+
+<script>
+  function sendHeight() {
+    parent.postMessage({ type: "resize-iframe", height: document.body.scrollHeight }, "*");
+  }
+  window.addEventListener("load", sendHeight);
+  window.addEventListener("resize", sendHeight);
+</script>
+
