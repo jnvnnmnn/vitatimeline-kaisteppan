@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Timeline - Fixed Height</title>
+    <title>Kai Steppan - Vita Timeline</title>
     <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -13,81 +13,58 @@
             font-family: 'Azeret Mono', monospace;
         }
         
-        html {
-            height: 700px;
-            overflow: hidden !important;
+        html, body {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
         }
         
         body {
             background: white;
             color: black;
-            line-height: 1.5;
-            height: 700px;
-            overflow: hidden !important;
-            margin: 0 !important;
-            padding: 0 !important;
+            line-height: 1.6;
         }
         
         .timeline-container {
             width: 100%;
-            height: 700px;
-            padding: 15px;
-            margin: 0 auto;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            padding: 30px 20px;
+            margin: 0;
+            box-sizing: border-box;
         }
         
         .timeline-header {
             text-align: center;
-            margin-bottom: 20px;
-            flex-shrink: 0;
+            margin-bottom: 40px;
         }
         
         .timeline-title {
-            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-size: clamp(2rem, 5vw, 3.5rem);
             font-weight: 700;
             color: black;
-            margin-bottom: 8px;
+            margin-bottom: 16px;
         }
         
         .timeline-accent {
-            width: 50px;
-            height: 3px;
+            width: 80px;
+            height: 4px;
             background: #FF4E27;
             margin: 0 auto;
         }
         
         .timeline {
             position: relative;
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding-right: 8px;
-        }
-        
-        /* Custom scrollbar */
-        .timeline::-webkit-scrollbar {
-            width: 3px;
-        }
-        
-        .timeline::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        
-        .timeline::-webkit-scrollbar-thumb {
-            background: #FF4E27;
-            border-radius: 2px;
+            width: 100%;
+            margin: 0 auto;
         }
         
         .timeline-line {
             position: absolute;
-            left: 20px;
+            left: 6%;
             top: 0;
             width: 2px;
             height: 100%;
             background: #e5e5e5;
-            z-index: 1;
         }
         
         .timeline-progress {
@@ -100,17 +77,15 @@
         .timeline-items {
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            padding-bottom: 15px;
-            position: relative;
-            z-index: 2;
+            gap: 32px;
+            padding-bottom: 30px;
         }
         
         .timeline-item {
             display: flex;
             align-items: flex-start;
             opacity: 0;
-            transform: translateX(-20px);
+            transform: translateX(-30px);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
@@ -120,57 +95,64 @@
         }
         
         .timeline-dot {
-            width: 14px;
-            height: 14px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            border: 3px solid #9ca3af;
+            border: 4px solid #9ca3af;
             background: white;
             flex-shrink: 0;
-            margin-top: 8px;
-            position: relative;
+            margin-top: 12px;
+            position: absolute;
+            left: 6%;
+            transform: translateX(-50%);
             z-index: 10;
             transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            transform: scale(0);
+            transform-origin: center;
+        }
+        
+        .timeline-dot:not(.visible) {
+            transform: translateX(-50%) scale(0);
         }
         
         .timeline-dot.visible {
-            transform: scale(1);
+            transform: translateX(-50%) scale(1);
         }
         
         .timeline-dot.highlighted {
             border-color: #FF4E27;
-            box-shadow: 0 0 15px rgba(255, 78, 39, 0.4);
+            box-shadow: 0 0 20px rgba(255, 78, 39, 0.4);
         }
         
         .timeline-card {
-            margin-left: 20px;
-            padding: 15px;
+            margin-left: 8%;
+            padding: 24px 32px;
             background: white;
             border: 2px solid #e5e5e5;
-            border-radius: 6px;
-            flex: 1;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            width: calc(90% - 8%);
+            max-width: none;
+            transition: all 0.4s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
         
         .timeline-card.visible {
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
         
         .timeline-card.highlighted {
             border-color: #FF4E27;
-            box-shadow: 0 6px 20px rgba(255, 78, 39, 0.15);
+            box-shadow: 0 8px 30px rgba(255, 78, 39, 0.15);
         }
         
         .timeline-card:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
         }
         
         .timeline-period {
-            font-size: 0.8rem;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             color: #6b7280;
         }
         
@@ -180,74 +162,124 @@
         }
         
         .timeline-company {
-            font-size: 1.1rem;
+            font-size: clamp(1.4rem, 3vw, 2rem);
             font-weight: 700;
             color: black;
-            margin-bottom: 6px;
+            margin-bottom: 10px;
             line-height: 1.3;
         }
         
         .timeline-subtitle {
-            font-size: 0.85rem;
+            font-size: clamp(1rem, 2.2vw, 1.3rem);
             color: #6b7280;
             font-weight: 500;
-            margin-bottom: 8px;
+            margin-bottom: 16px;
         }
         
         .timeline-description {
-            font-size: 0.85rem;
+            font-size: clamp(1rem, 2.2vw, 1.3rem);
             color: #374151;
-            line-height: 1.5;
+            line-height: 1.6;
         }
         
         /* Responsive Design */
-        @media (min-width: 600px) {
+        @media (min-width: 768px) {
             .timeline-container {
-                padding: 20px;
+                padding: 40px 30px;
+            }
+            
+            .timeline-items {
+                gap: 40px;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .timeline-container {
+                padding: 50px 40px;
+            }
+            
+            .timeline-items {
+                gap: 48px;
+            }
+            
+            .timeline-card {
+                padding: 32px 40px;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .timeline-container {
+                padding: 60px 50px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .timeline-container {
+                padding: 20px 15px;
             }
             
             .timeline-line {
-                left: 24px;
+                left: 4%;
             }
             
             .timeline-dot {
+                left: 4%;
                 width: 16px;
                 height: 16px;
             }
             
             .timeline-card {
-                margin-left: 24px;
-                padding: 18px;
-            }
-            
-            .timeline-company {
-                font-size: 1.2rem;
-            }
-            
-            .timeline-period,
-            .timeline-subtitle,
-            .timeline-description {
-                font-size: 0.9rem;
+                margin-left: 6%;
+                width: calc(92% - 6%);
+                padding: 18px 20px;
             }
         }
         
-        @media (min-width: 800px) {
-            .timeline-company {
-                font-size: 1.3rem;
+        /* Animation keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
             }
-            
-            .timeline-period,
-            .timeline-subtitle,
-            .timeline-description {
-                font-size: 0.95rem;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
+        }
+        
+        .timeline-item.visible {
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Remove scrolling constraints and make truly flexible */
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        
+        .timeline-container {
+            min-height: auto;
+        }
+        
+        html {
+            margin: 0;
+            padding: 0;
+        }
+        
+        * {
+            box-sizing: border-box;
         }
     </style>
 </head>
 <body>
     <div class="timeline-container">
         <div class="timeline-header">
-            <h1 class="timeline-title">VITA - TIMELINE</h1>
+            <h1 class="timeline-title">Professional Timeline</h1>
             <div class="timeline-accent"></div>
         </div>
 
@@ -322,6 +354,7 @@
                 const timelineItem = document.createElement('div');
                 timelineItem.className = 'timeline-item';
                 timelineItem.dataset.itemId = item.id;
+                timelineItem.style.position = 'relative';
                 
                 const dot = document.createElement('div');
                 dot.className = `timeline-dot ${item.isHighlighted ? 'highlighted' : ''}`;
@@ -369,6 +402,7 @@
         }
 
         function initializeAnimations() {
+            // Use Intersection Observer for animations - no scrolling required
             const observer = new IntersectionObserver(
                 (entries) => {
                     entries.forEach((entry) => {
@@ -378,46 +412,58 @@
                             if (!visibleItems.has(itemId)) {
                                 visibleItems.add(itemId);
                                 
+                                // Add visible class with delay
                                 setTimeout(() => {
                                     entry.target.classList.add('visible');
                                     
+                                    // Animate dot
                                     const dot = entry.target.querySelector('.timeline-dot');
                                     if (dot) {
                                         setTimeout(() => {
                                             dot.classList.add('visible');
-                                        }, 150);
+                                        }, 200);
                                     }
                                     
+                                    // Animate card
                                     const card = entry.target.querySelector('.timeline-card');
                                     if (card) {
                                         setTimeout(() => {
                                             card.classList.add('visible');
-                                        }, 300);
+                                        }, 400);
                                     }
                                     
+                                    // Update progress line
                                     updateProgress();
-                                }, itemId * 100);
+                                }, itemId * 150);
                             }
                         }
                     });
                 },
                 {
-                    threshold: 0.3,
-                    rootMargin: '0px 0px -5% 0px'
+                    threshold: 0.2,
+                    rootMargin: '0px 0px -10% 0px'
                 }
             );
 
+            // Observe all timeline items
             const items = document.querySelectorAll('[data-item-id]');
             items.forEach((item) => {
                 observer.observe(item);
             });
         }
 
-        // Initialize
+        // Initialize everything
         createTimeline();
+        
+        // Start animations after a short delay
         setTimeout(() => {
             initializeAnimations();
-        }, 300);
+        }, 500);
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            updateProgress();
+        });
     </script>
 </body>
 </html>
