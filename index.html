@@ -459,6 +459,63 @@
         setTimeout(() => {
             initializeAnimations();
         }, 500);
+
+        // Auto-resize function for WIX Studio iframe
+        function resizeIframe() {
+            const body = document.body;
+            const html = document.documentElement;
+            
+            // Calculate the full height of content
+            const height = Math.max(
+                body.scrollHeight,
+                body.offsetHeight,
+                html.clientHeight,
+                html.scrollHeight,
+                html.offsetHeight
+            );
+            
+            // Send height to parent window (WIX Studio)
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({
+                    type: 'setHeight',
+                    height: height
+                }, '*');
+                
+                // Also try WIX-specific message format
+                window.parent.postMessage({
+                    eventType: 'IFRAME_RESIZE',
+                    data: {
+                        height: height
+                    }
+                }, '*');
+            }
+        }
+
+        // Resize on load and when content changes
+        window.addEventListener('load', () => {
+            setTimeout(resizeIframe, 500);
+            setTimeout(resizeIframe, 1000);
+            setTimeout(resizeIframe, 2000);
+        });
+
+        // Resize when window is resized
+        window.addEventListener('resize', () => {
+            setTimeout(resizeIframe, 100);
+        });
+
+        // Monitor for content changes and resize accordingly
+        const observer = new MutationObserver(() => {
+            setTimeout(resizeIframe, 100);
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+            attributes: true
+        });
+
+        // Initial resize call
+        setTimeout(resizeIframe, 100);
         
         // Handle window resize
         window.addEventListener('resize', () => {
